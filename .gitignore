@@ -45,3 +45,7 @@ app.*.map.json
 /lib/firebase_options.dart
 android/app/google-services.json
 firebase.json
+remoteconfig.json
+devtools_options.yaml
+.firebaserc
+.env
