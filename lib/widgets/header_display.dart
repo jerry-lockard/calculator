@@ -3,7 +3,7 @@ import 'package:calculator/viewmodels/calculator_viewmodel.dart';
 import 'package:provider/provider.dart';
 
 class HeaderDisplay extends StatelessWidget {
-  const HeaderDisplay({Key? key}) : super(key: key);
+  const HeaderDisplay({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -20,7 +20,7 @@ class HeaderDisplay extends StatelessWidget {
             viewmodel.inputHeaderText,
             style: TextStyle(
               fontSize: 70,
-              color: Theme.of(context).colorScheme.onBackground,
+              color: Theme.of(context).colorScheme.onSurface,
             ),
             textAlign: TextAlign.end,
           ),

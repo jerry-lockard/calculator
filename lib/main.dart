@@ -4,18 +4,39 @@ import 'package:calculator/viewmodels/calculator_viewmodel.dart';
 import 'package:calculator/viewmodels/theme_viewmodel.dart';
 import 'package:provider/provider.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'firebase_options.dart';
+import 'package:firebase_analytics/firebase_analytics.dart';
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await dotenv.load(fileName: '.env');
+
   await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
+    options: FirebaseOptions(
+      apiKey: dotenv.env['FIREBASE_API_KEY']!,
+      authDomain: dotenv.env['FIREBASE_AUTH_DOMAIN']!,
+      projectId: dotenv.env['FIREBASE_PROJECT_ID']!,
+      storageBucket: dotenv.env['FIREBASE_STORAGE_BUCKET']!,
+      messagingSenderId: dotenv.env['FIREBASE_MESSAGING_SENDER_ID']!,
+      appId: dotenv.env['FIREBASE_APP_ID']!,
+      measurementId: dotenv.env['FIREBASE_MEASUREMENT_ID']!,
+    ),
   );
+
+  // Set up Crashlytics
+  FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterError;
+
   runApp(
     MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => CalculatorViewModel()),
         ChangeNotifierProvider(create: (_) => ThemeViewModel()),
+        Provider<FirebaseApp>(create: (context) => Firebase.app()),
+        Provider<FirebaseAnalytics>(
+            create: (context) => FirebaseAnalytics.instance),
+        Provider<FirebaseCrashlytics>(
+            create: (context) => FirebaseCrashlytics.instance),
       ],
       child: const CalculatorApp(),
     ),
@@ -24,6 +45,7 @@ void main() async {
 
 class CalculatorApp extends StatelessWidget {
   const CalculatorApp({super.key});
+
   @override
   Widget build(BuildContext context) {
     var viewmodel = context.watch<ThemeViewModel>();

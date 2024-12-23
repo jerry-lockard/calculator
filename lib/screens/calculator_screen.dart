@@ -6,13 +6,13 @@ import 'package:calculator/widgets/theme_app_bar.dart';
 const kSidePadding = 14.0;
 
 class CalculatorScreen extends StatelessWidget {
-  const CalculatorScreen({Key? key}) : super(key: key);
+  const CalculatorScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: ThemeAppBar.getAppBar(context),
-      backgroundColor: Theme.of(context).colorScheme.background,
+      backgroundColor: Theme.of(context).colorScheme.surface,
       body: SafeArea(
         child: _buildBody(),
       ),

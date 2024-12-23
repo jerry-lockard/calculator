@@ -26,7 +26,7 @@ const _inputPadOrder = [
 ];
 
 class InputPad extends StatelessWidget {
-  const InputPad({Key? key}) : super(key: key);
+  const InputPad({super.key});
 
   @override
   Widget build(BuildContext context) {

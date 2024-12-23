@@ -16,10 +16,10 @@ enum _InputButtonColorType {
 
 class InputButton extends StatelessWidget {
   const InputButton({
-    Key? key,
+    super.key,
     required this.inputType,
     required this.size,
-  }) : super(key: key);
+  });
   final InputType inputType;
   final Size size;
 
@@ -144,7 +144,7 @@ class InputButton extends StatelessWidget {
       case _InputButtonColorType.secondary:
         return Theme.of(context).colorScheme.secondary;
       case _InputButtonColorType.normal:
-        return Theme.of(context).colorScheme.surfaceVariant;
+        return Theme.of(context).colorScheme.surfaceContainerHighest;
     }
   }
 
