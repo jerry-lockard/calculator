@@ -63,8 +63,8 @@ flutter:
   uses-material-design: true
 
   # To add assets to your application, add an assets section, like this:
-  # assets:
-  #   - images/a_dot_burr.jpeg
+  assets:
+     - images/
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see
@@ -81,8 +81,8 @@ flutter:
   fonts:
    - family: Pretendard
      fonts:
-       - asset: fonts/Pretendard-Regular.ttf
-       - asset: fonts/Pretendard-SemiBold.ttf
+       - asset: assets/fonts/Pretendard-Regular.ttf
+       - asset: assets/fonts/Pretendard-SemiBold.ttf
          weight: 600
 
 
