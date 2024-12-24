@@ -49,3 +49,4 @@ remoteconfig.json
 devtools_options.yaml
 .firebaserc
 .env
+.qodo
