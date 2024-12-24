@@ -11,14 +11,23 @@ class CalculatorViewModel extends ChangeNotifier {
 
   CalculatorViewModel(this._remoteConfig);
 
-  String get inputHeaderText =>
-      _inputExpression.isEmpty
-          ? _doubleToDisplayText(result)
-          : _convertOperatorForDisplay(_inputExpression);
+  String get inputHeaderText => _inputExpression.isEmpty
+      ? _doubleToDisplayText(result)
+      : _convertOperatorForDisplay(_inputExpression);
 
   bool get _canAddExpression =>
       _inputExpression.length < _remoteConfig.maxInputLength;
 
+  /// Handles input button press.
+  ///
+  /// [inputType] is the type of input button that was pressed.
+  ///
+  /// [onTextOverflow] is a callback that will be called if the expression
+  /// exceeds the maximum length allowed.
+  ///
+  /// The method will update [inputHeaderText] accordingly.
+  ///
+  /// The method will also notify the listeners if the state has changed.
   void onPressButton({
     required InputType inputType,
     required VoidCallback onTextOverflow,
@@ -57,6 +66,24 @@ class CalculatorViewModel extends ChangeNotifier {
     }
   }
 
+  /// Adds an expression to the input expression.
+  ///
+  /// [input] is the expression to add.
+  ///
+  /// [onTextOverflow] is a callback that will be called if the expression
+  /// exceeds the maximum length allowed.
+  ///
+  /// The method will update [inputHeaderText] accordingly.
+  ///
+  /// The method will also notify the listeners if the state has changed.
+  ///
+  /// If [input] is not a number and the last input was not a number, the method
+  /// will replace the last input with [input].
+  ///
+  /// If the expression exceeds the maximum length allowed, the method will call
+  /// [onTextOverflow].
+  ///
+  /// If the expression is '0', the method will replace it with an empty string.
   void _onAddExpression({
     required String input,
     required VoidCallback onTextOverflow,
@@ -90,22 +117,45 @@ class CalculatorViewModel extends ChangeNotifier {
     return _isNumber(lastInput);
   }
 
+  /// Replaces mathematical operators with their corresponding Unicode
+  /// characters for display purposes.
+  ///
+  /// For example, '*' is replaced with '×' and '/' is replaced with '÷'.
+  ///
+  /// [expression] is the expression to replace the operators in.
+  ///
+  /// Returns the expression with the operators replaced.
   String _convertOperatorForDisplay(String expression) {
     expression = expression.replaceAll('*', '×');
     expression = expression.replaceAll('/', '÷');
     return expression;
   }
 
+  /// Returns true if [input] is a number, false otherwise.
+  ///
+  /// A number is defined as a string that can be parsed into an integer.
+  ///
+  /// For example, '123' is a number, but 'a' is not.
   bool _isNumber(String input) {
     return int.tryParse(input) != null;
   }
 
+  /// Resets the expression and the result to their initial values.
+  ///
+  /// This method is called when the 'C' button is pressed.
+  ///
+  /// The method also notifies the listeners of the state change.
   void _onPressClear() {
     _inputExpression = '';
     result = 0;
     notifyListeners();
   }
 
+  /// Deletes the last character of the expression.
+  ///
+  /// This method is called when the 'DEL' button is pressed.
+  ///
+  /// The method also notifies the listeners of the state change.
   void _onPressDelete() {
     _inputExpression =
         _inputExpression.substring(0, _inputExpression.length - 1);
@@ -113,6 +163,13 @@ class CalculatorViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
+  /// Handles the 'Equality' button press.
+  ///
+  /// If the last input was not a number, the method will delete the last
+  /// character of the expression.
+  ///
+  /// The method will then update the expression and notify the listeners of
+  /// the state change.
   void _onPressEquality() {
     if (!_isLastInputNumber) {
       _inputExpression =
@@ -122,6 +179,13 @@ class CalculatorViewModel extends ChangeNotifier {
     _updateExpression();
   }
 
+  /// Updates the expression and result by evaluating the current expression
+  /// using the [math_expressions] library.
+  ///
+  /// If the expression is invalid, the method will log the error and leave the
+  /// state unchanged.
+  ///
+  /// The method will also notify the listeners of the state change.
   void _updateExpression() {
     try {
       Expression exp = Parser().parse(_inputExpression);
@@ -135,6 +199,13 @@ class CalculatorViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
+  /// Converts a double to a string with a limited number of decimal places.
+  ///
+  /// If [value] is an integer, the method will return the integer as a string.
+  ///
+  /// If [value] is not an integer, the method will return the string
+  /// representation of [value] with a maximum of
+  /// [RemoteConfig.maxDecimalLength] decimal places.
   String _doubleToDisplayText(double value) {
     if (value.truncateToDouble() == value) {
       return value.truncate().toString();

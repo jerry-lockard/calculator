@@ -24,6 +24,13 @@ class InputButton extends StatelessWidget {
   final Size size;
 
   @override
+
+  /// Returns a [SizedBox] containing a [MaterialButton] with a round
+  /// rectangle shape, infinite height and width, and a child of [_getSymbol()].
+  /// The button is configured with [_getForegroundColor], [_getHighlightColor],
+  /// and [_getButtonColor] as its text color, highlight color, and color
+  /// respectively. When the button is pressed, [_onPressButton] is called.
+  /// The button is also configured with zero padding and elevation.
   Widget build(BuildContext context) {
     return SizedBox(
       height: size.height,
@@ -48,6 +55,9 @@ class InputButton extends StatelessWidget {
     );
   }
 
+  /// Calls [CalculatorViewModel.onPressButton] with the given [inputType] and
+  /// a callback that shows a Cupertino alert dialog with a message and an OK
+  /// button if the text overflows.
   void _onPressButton(BuildContext context) {
     var viewmodel = context.read<CalculatorViewModel>();
     viewmodel.onPressButton(
@@ -69,6 +79,14 @@ class InputButton extends StatelessWidget {
     );
   }
 
+  /// Returns a symbol for the given [inputType].
+  ///
+  /// - A [Text] widget with a bold font style for number buttons and the
+  ///   decimal point button.
+  /// - A [FaIcon] widget with a centered and fitted icon for operator buttons.
+  /// - A [FaIcon] widget with a centered and fitted icon for the clear,
+  ///   delete, and percent buttons.
+  ///
   Widget _getSymbol() {
     switch (inputType) {
       case InputType.point:
@@ -94,6 +112,11 @@ class InputButton extends StatelessWidget {
     }
   }
 
+  /// Returns a [Padding] widget containing a [FittedBox] widget with an [FaIcon]
+  /// widget inside. The padding is set to [_kIconButtonPadding] of the button's
+  /// height, and the [FaIcon] widget is given the [iconData] as its icon.
+  /// The purpose of this method is to create a symbol for an operator button.
+  /// The icon is always centered in the button.
   Widget _getIconSymbol(IconData iconData) {
     return Padding(
       padding: EdgeInsets.all(size.height * _kIconButtonPadding),
@@ -101,6 +124,11 @@ class InputButton extends StatelessWidget {
     );
   }
 
+  /// Returns a [Padding] widget containing a [FittedBox] widget with a [Text]
+  /// widget inside. The padding is set to [_kTextButtonPadding] of the button's
+  /// height, and the [Text] widget is given the [text] as its text and a bold
+  /// font style. The purpose of this method is to create a symbol for a number
+  /// button. The text is always centered in the button.
   Widget _getTextSymbol(String text) {
     return Padding(
       padding: EdgeInsets.all(size.height * _kTextButtonPadding),
@@ -110,6 +138,11 @@ class InputButton extends StatelessWidget {
     );
   }
 
+  /// Returns the color type of the button based on the [inputType].
+  ///
+  /// - number buttons and the decimal point button are normal color.
+  /// - operator buttons are primary color.
+  /// - clear, delete, and percent buttons are secondary color.
   _InputButtonColorType _getColorType() {
     switch (inputType) {
       case InputType.number0:
@@ -137,6 +170,11 @@ class InputButton extends StatelessWidget {
     }
   }
 
+  /// Returns the button color based on the [inputType].
+  ///
+  /// - primary color for operator buttons.
+  /// - secondary color for clear, delete, and percent buttons.
+  /// - normal color for number buttons and the decimal point button.
   Color _getButtonColor(BuildContext context) {
     switch (_getColorType()) {
       case _InputButtonColorType.primary:
@@ -148,6 +186,11 @@ class InputButton extends StatelessWidget {
     }
   }
 
+  /// Returns the highlight color of the button based on the [inputType].
+  ///
+  /// - primaryContainer color for operator buttons.
+  /// - secondaryContainer color for clear, delete, and percent buttons.
+  /// - tertiaryContainer color for number buttons and the decimal point button.
   Color _getHighlightColor(BuildContext context) {
     switch (_getColorType()) {
       case _InputButtonColorType.primary:
@@ -159,6 +202,11 @@ class InputButton extends StatelessWidget {
     }
   }
 
+  /// Returns the foreground color of the button based on the [inputType].
+  ///
+  /// - onPrimary color for operator buttons.
+  /// - onSecondary color for clear, delete, and percent buttons.
+  /// - onSurfaceVariant color for number buttons and the decimal point button.
   Color _getForegroundColor(BuildContext context) {
     switch (_getColorType()) {
       case _InputButtonColorType.primary:

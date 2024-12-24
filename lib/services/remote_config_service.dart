@@ -7,6 +7,19 @@ class RemoteConfigService {
 
   RemoteConfigService._(this._remoteConfig);
 
+  /// Initializes RemoteConfig with defaults and fetches and activates the
+  /// current config values.
+  ///
+  /// This must be called before using any other methods of [RemoteConfigService].
+  ///
+  /// The defaults are set to the following values:
+  ///
+  /// - `welcome_message`: "Welcome to Calculator!"
+  /// - `theme_seed_colors`: ["#00BCD4", "#2196F3", "#9C27B0", "#E91E63", "#FF9800"]
+  /// - `default_theme_index`: 0
+  /// - `default_brightness`: "light"
+  /// - `max_input_length`: 15
+  /// - `max_decimal_length`: 5
   static Future<RemoteConfigService> initialize() async {
     final remoteConfig = FirebaseRemoteConfig.instance;
 
@@ -17,7 +30,8 @@ class RemoteConfigService {
 
     await remoteConfig.setDefaults({
       'welcome_message': 'Welcome to Calculator!',
-      'theme_seed_colors': '["#00BCD4","#2196F3","#9C27B0","#E91E63","#FF9800"]',
+      'theme_seed_colors':
+          '["#00BCD4","#2196F3","#9C27B0","#E91E63","#FF9800"]',
       'default_theme_index': '0',
       'default_brightness': 'light',
       'max_input_length': '15',
@@ -34,8 +48,10 @@ class RemoteConfigService {
   List<Color> get themeSeedColors {
     final colorsJson = _remoteConfig.getString('theme_seed_colors');
     final colorStrings = List<String>.from(jsonDecode(colorsJson));
-    return colorStrings.map((colorString) =>
-        Color(int.parse(colorString.replaceAll('#', '0xFF')))).toList();
+    return colorStrings
+        .map((colorString) =>
+            Color(int.parse(colorString.replaceAll('#', '0xFF'))))
+        .toList();
   }
 
   int get defaultThemeIndex =>

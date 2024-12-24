@@ -6,6 +6,15 @@ class HeaderDisplay extends StatelessWidget {
   const HeaderDisplay({super.key});
 
   @override
+
+  /// Builds the header display widget.
+  //
+  /// This widget is used to display the header text at the top of the
+  /// calculator screen. The text is displayed in a large font size and
+  /// is centered at the right of the screen.
+  //
+  /// The text displayed is determined by the [CalculatorViewModel]'s
+  /// [inputHeaderText] property.
   Widget build(BuildContext context) {
     var viewmodel = context.watch<CalculatorViewModel>();
 

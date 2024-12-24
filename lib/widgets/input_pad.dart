@@ -29,6 +29,18 @@ class InputPad extends StatelessWidget {
   const InputPad({super.key});
 
   @override
+
+  /// Builds the input pad widget.
+  ///
+  /// The input pad widget displays the number and operator buttons in a
+  /// responsive grid layout. The size of the buttons and the spacing between
+  /// them are calculated based on the width of the screen.
+  ///
+  /// The [InputType.number0] button is double the width of the other buttons to
+  /// make it easier to press on smaller screens.
+  ///
+  /// The widget is wrapped in a [Wrap] widget to make it responsive to different
+  /// screen sizes and orientations.
   Widget build(BuildContext context) {
     var width = MediaQuery.of(context).size.width - 2 * kSidePadding;
     var buttonsSize = width / 4 * 0.9;

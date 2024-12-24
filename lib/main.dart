@@ -9,6 +9,14 @@ import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
+/*************  ✨ Codeium Command ⭐  *************/
+/// The entry point of the application.
+///
+/// This function initializes the Flutter framework and sets up the application
+/// by loading the environment variables from the `.env` file, initializing
+/// Firebase, setting up Crashlytics, and running the app with the necessary
+/// providers.
+/// ****  540e1cfc-9009-4ba5-81cc-5e96c299ce48  ******
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await dotenv.load(fileName: '.env');
@@ -39,7 +47,8 @@ void main() async {
     runApp(
       MultiProvider(
         providers: [
-          ChangeNotifierProvider(create: (_) => CalculatorViewModel(remoteConfig)),
+          ChangeNotifierProvider(
+              create: (_) => CalculatorViewModel(remoteConfig)),
           ChangeNotifierProvider(create: (_) => ThemeViewModel(remoteConfig)),
           Provider<FirebaseAnalytics>(
               create: (context) => FirebaseAnalytics.instance),
@@ -63,6 +72,19 @@ class CalculatorApp extends StatelessWidget {
   const CalculatorApp({super.key});
 
   @override
+
+  /// Builds the main application widget based on the theme from the
+  /// [ThemeViewModel].
+  ///
+  /// This widget is the root of the application and is responsible for setting
+  /// up the theme, title, and home widget.
+  ///
+  /// The theme is determined by the [ThemeViewModel] and is based on the
+  /// application's current theme mode (light or dark) and the custom theme
+  /// color seed.
+  ///
+  /// The home widget is the [CalculatorScreen] widget, which displays the
+  /// calculator UI and handles user input.
   Widget build(BuildContext context) {
     var viewmodel = context.watch<ThemeViewModel>();
 
