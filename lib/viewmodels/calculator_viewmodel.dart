@@ -1,22 +1,23 @@
 import 'dart:developer';
-
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
 import 'package:calculator/models/input_type.dart';
+import 'package:calculator/services/remote_config_service.dart';
 import 'package:math_expressions/math_expressions.dart';
 
-const _kMaxInputLength = 15;
-const _kMaxDecimalLength = 5;
-
 class CalculatorViewModel extends ChangeNotifier {
+  final RemoteConfigService _remoteConfig;
   String _inputExpression = '';
   double result = 0;
 
-  String get inputHeaderText => _inputExpression.isEmpty
-      ? _doubleToDisplayText(result)
-      : _convertOperatorForDisplay(_inputExpression);
+  CalculatorViewModel(this._remoteConfig);
 
-  bool get _canAddExpression => _inputExpression.length < _kMaxInputLength;
+  String get inputHeaderText =>
+      _inputExpression.isEmpty
+          ? _doubleToDisplayText(result)
+          : _convertOperatorForDisplay(_inputExpression);
+
+  bool get _canAddExpression =>
+      _inputExpression.length < _remoteConfig.maxInputLength;
 
   void onPressButton({
     required InputType inputType,
@@ -141,10 +142,9 @@ class CalculatorViewModel extends ChangeNotifier {
       var text = value.toString();
       var decimalIndex = text.indexOf('.');
       var decimalLength = text.length - decimalIndex - 1;
-      if (decimalLength > _kMaxDecimalLength) {
-        text = value.toStringAsFixed(_kMaxDecimalLength);
+      if (decimalLength > _remoteConfig.maxDecimalLength) {
+        text = value.toStringAsFixed(_remoteConfig.maxDecimalLength);
       }
-
       return text;
     }
   }

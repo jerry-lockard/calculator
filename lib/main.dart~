@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:calculator/screens/calculator_screen.dart';
 import 'package:calculator/viewmodels/calculator_viewmodel.dart';
 import 'package:calculator/viewmodels/theme_viewmodel.dart';
-import 'package:calculator/services/remote_config_service.dart';
 import 'package:provider/provider.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
@@ -26,30 +25,9 @@ void main() async {
       ),
     );
 
-    // Initialize Firebase services
+    // Initialize other Firebase services
     await FirebaseCrashlytics.instance.setCrashlyticsCollectionEnabled(true);
     await FirebaseAnalytics.instance.setAnalyticsCollectionEnabled(true);
-
-    // Initialize Remote Config
-    final remoteConfig = await RemoteConfigService.initialize();
-
-    // Set up Crashlytics
-    FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterError;
-
-    runApp(
-      MultiProvider(
-        providers: [
-          ChangeNotifierProvider(create: (_) => CalculatorViewModel(remoteConfig)),
-          ChangeNotifierProvider(create: (_) => ThemeViewModel(remoteConfig)),
-          Provider<FirebaseAnalytics>(
-              create: (context) => FirebaseAnalytics.instance),
-          Provider<FirebaseCrashlytics>(
-              create: (context) => FirebaseCrashlytics.instance),
-          Provider<RemoteConfigService>.value(value: remoteConfig),
-        ],
-        child: const CalculatorApp(),
-      ),
-    );
   } catch (e) {
     if (e.toString().contains('duplicate-app')) {
       // Firebase already initialized, continue
@@ -57,6 +35,24 @@ void main() async {
       rethrow;
     }
   }
+
+  // Set up Crashlytics
+  FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterError;
+
+  runApp(
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) => CalculatorViewModel()),
+        ChangeNotifierProvider(create: (_) => ThemeViewModel()),
+        Provider<FirebaseApp>(create: (context) => Firebase.app()),
+        Provider<FirebaseAnalytics>(
+            create: (context) => FirebaseAnalytics.instance),
+        Provider<FirebaseCrashlytics>(
+            create: (context) => FirebaseCrashlytics.instance),
+      ],
+      child: const CalculatorApp(),
+    ),
+  );
 }
 
 class CalculatorApp extends StatelessWidget {

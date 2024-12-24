@@ -10,10 +10,11 @@ class ThemeAppBar {
     return AppBar(
       actions: [
         Row(
-          children: kThemeSeedColors
+          children: viewmodel.themeSeedColors
               .map((e) => _buildSeedColorButton(e, context))
               .toList(),
         ),
+        const SizedBox(width: 10),
         const SizedBox(width: 10),
         CupertinoSwitch(
           value: viewmodel.brightness == Brightness.light,
@@ -32,7 +33,7 @@ class ThemeAppBar {
     var viewmodel = context.watch<ThemeViewModel>();
     return GestureDetector(
       onTap: () {
-        viewmodel.seedColorIndex = kThemeSeedColors.indexOf(color);
+        viewmodel.seedColorIndex = viewmodel.themeSeedColors.indexOf(color);
       },
       child: Padding(
         padding: const EdgeInsets.only(left: 4.0),
